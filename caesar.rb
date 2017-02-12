@@ -27,10 +27,11 @@ class Caesar
     (0...ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
   end
 
+  private
   # のちに例外機構などにして、メソッド内orクラス内に埋め込む
-  def check_ciphertext_nil(ciphertext)
+  def self.check_ciphertext_nil(ciphertext)
     if ciphertext.nil?
-      puts "please input ciphertext argument"
+      puts "please input ciphertext!"
       exit
     end
   end
