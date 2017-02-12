@@ -37,5 +37,5 @@ class Caesar
   end
 end
 
-ciphertext = ARGV[0];
-puts Caesar.brute_force_attack(ciphertext)
+# ciphertext = ARGV[0];
+# puts Caesar.brute_force_attack(ciphertext)
