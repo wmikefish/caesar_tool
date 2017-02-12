@@ -2,7 +2,7 @@
 # コマンドライン引数で文字列を入力として受け取り、rot1~rot25までを一覧で表示する
 
 # -- やりたい改変 --
-# カエサル復号、暗号化を作る →　クラス化する
+# カエサル暗号化を作る
 # 大文字、小文字どちらにも対応
 # keywordが含まれるものを当てるのも作る
 # テストを組む
@@ -12,7 +12,7 @@ class Caesar
   ALPHABETS.map!(&:freeze).freeze # イミュータブル化
 
   def self.dencrypt(ciphertext, shift)
-    check_ciphertext_nil(ciphertext)
+    alert_ciphertext_nil(ciphertext)
     ciphertext.upcase.each_char.inject('') do |plaintext, c|
       if ALPHABETS.include?(c)
         i = (ALPHABETS.index(c) + shift) % ALPHABETS.length
@@ -29,7 +29,7 @@ class Caesar
 
   private
   # のちに例外機構などにして、メソッド内orクラス内に埋め込む
-  def self.check_ciphertext_nil(ciphertext)
+  def self.alert_ciphertext_nil(ciphertext)
     if ciphertext.nil?
       puts "please input ciphertext!"
       exit
