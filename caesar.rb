@@ -4,32 +4,37 @@
 # -- やりたい改変 --
 # カエサル復号、暗号化を作る →　クラス化する
 # 大文字、小文字どちらにも対応
-# upcaseに落として、小文字であとで元に戻す！
 # keywordが含まれるものを当てるのも作る
 # テストを組む
 
-ALPHABETS = Array('A'..'Z')
-ALPHABETS.map!(&:freeze).freeze # イミュータブル化
+class Caesar
+  ALPHABETS = Array('A'..'Z')
+  ALPHABETS.map!(&:freeze).freeze # イミュータブル化
 
-def dencrypt(ciphertext, shift)
-  ciphertext.upcase.each_char.inject('') do |plaintext, c|
-    i = (ALPHABETS.index(c) + shift) % ALPHABETS.length
-    plaintext << ALPHABETS[i]
+  def self.dencrypt(ciphertext, shift)
+    check_ciphertext_nil(ciphertext)
+    ciphertext.upcase.each_char.inject('') do |plaintext, c|
+      if ALPHABETS.include?(c)
+        i = (ALPHABETS.index(c) + shift) % ALPHABETS.length
+        plaintext << ALPHABETS[i]
+      else
+        plaintext << c
+      end
+    end
   end
-end
 
-def brute_force_attack(ciphertext)
-  (0...ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
-end
+  def self.brute_force_attack(ciphertext)
+    (0...ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
+  end
 
-# のちに例外機構などにして、メソッド内orクラス内に埋め込む
-def check_ciphertext_nil(ciphertext)
-  if ciphertext.nil?
-    puts "please input ciphertext argument"
-    exit
+  # のちに例外機構などにして、メソッド内orクラス内に埋め込む
+  def check_ciphertext_nil(ciphertext)
+    if ciphertext.nil?
+      puts "please input ciphertext argument"
+      exit
+    end
   end
 end
 
 ciphertext = ARGV[0];
-check_ciphertext_nil(ciphertext)
-puts brute_force_attack(ciphertext)
+puts Caesar.brute_force_attack(ciphertext)
