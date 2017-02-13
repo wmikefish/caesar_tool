@@ -13,14 +13,14 @@ class Caesar
   L_ALPHABETS = Array('a'..'z')
   L_ALPHABETS.map!(&:freeze).freeze
 
-  def self.dencrypt(ciphertext, shift)
+  def self.dencrypt(ciphertext, rotate)
     alert_ciphertext_nil(ciphertext)
     ciphertext.each_char.inject('') do |plaintext, c|
       if U_ALPHABETS.include?(c)
-        i = (U_ALPHABETS.index(c) + shift) % U_ALPHABETS.length
+        i = (U_ALPHABETS.index(c) + rotate) % U_ALPHABETS.length
         plaintext << U_ALPHABETS[i]
       elsif L_ALPHABETS.include?(c)
-        i = (L_ALPHABETS.index(c) + shift) % L_ALPHABETS.length
+        i = (L_ALPHABETS.index(c) + rotate) % L_ALPHABETS.length
         plaintext << L_ALPHABETS[i]
       else
         plaintext << c
@@ -29,7 +29,7 @@ class Caesar
   end
 
   def self.brute_force_attack(ciphertext)
-    (0...U_ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
+    (0...U_ALPHABETS.length).map { |rotate| dencrypt(ciphertext, rotate) }
   end
 
   private
@@ -40,6 +40,7 @@ class Caesar
       exit
     end
   end
+
 end
 
 # ciphertext = ARGV[0];
