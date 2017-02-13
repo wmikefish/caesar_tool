@@ -8,15 +8,20 @@
 # テストを組む
 
 class Caesar
-  ALPHABETS = Array('A'..'Z')
-  ALPHABETS.map!(&:freeze).freeze # イミュータブル化
+  U_ALPHABETS = Array('A'..'Z')
+  U_ALPHABETS.map!(&:freeze).freeze # イミュータブル化
+  L_ALPHABETS = Array('a'..'z')
+  L_ALPHABETS.map!(&:freeze).freeze
 
   def self.dencrypt(ciphertext, shift)
     alert_ciphertext_nil(ciphertext)
-    ciphertext.upcase.each_char.inject('') do |plaintext, c|
-      if ALPHABETS.include?(c)
-        i = (ALPHABETS.index(c) + shift) % ALPHABETS.length
-        plaintext << ALPHABETS[i]
+    ciphertext.each_char.inject('') do |plaintext, c|
+      if U_ALPHABETS.include?(c)
+        i = (U_ALPHABETS.index(c) + shift) % U_ALPHABETS.length
+        plaintext << U_ALPHABETS[i]
+      elsif L_ALPHABETS.include?(c)
+        i = (L_ALPHABETS.index(c) + shift) % L_ALPHABETS.length
+        plaintext << L_ALPHABETS[i]
       else
         plaintext << c
       end
@@ -24,7 +29,7 @@ class Caesar
   end
 
   def self.brute_force_attack(ciphertext)
-    (0...ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
+    (0...U_ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
   end
 
   private

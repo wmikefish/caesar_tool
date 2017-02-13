@@ -66,6 +66,11 @@ describe Caesar do
     end
   end
 
+# linterに起こられるので小文字をkomojiと書く
+  it "komojiはkomoji,大文字は大文字に変換されること" do
+    expect(Caesar.dencrypt('V unir n Cra.', 13)).to eq 'I have a Pen.'
+  end
+
 ### brute_force_attack
   it "brute_force_attackがROT0~25になってること" do
     expect(Caesar.brute_force_attack("ABCDEFGHIJKLMNOPQRSTUVWXYZ")).to eq ROTN[0..25]
