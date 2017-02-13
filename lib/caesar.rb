@@ -3,20 +3,16 @@
 
 # -- やりたい改変 --
 # カエサル暗号化を作る
-# 大文字、小文字どちらにも対応
 # keywordが含まれるものを当てるのも作る
-# テストを組む
 
 class Caesar
-  ALPHABETS = Array('A'..'Z')
-  ALPHABETS.map!(&:freeze).freeze # イミュータブル化
-
-  def self.dencrypt(ciphertext, shift)
+  def self.dencrypt(ciphertext, rot_n)
     alert_ciphertext_nil(ciphertext)
-    ciphertext.upcase.each_char.inject('') do |plaintext, c|
-      if ALPHABETS.include?(c)
-        i = (ALPHABETS.index(c) + shift) % ALPHABETS.length
-        plaintext << ALPHABETS[i]
+    ciphertext.each_char.inject('') do |plaintext, c|
+      if ('A'..'Z').include?(c)
+        plaintext << rotate(c, rot_n)
+      elsif ('a'..'z').include?(c)
+        plaintext << rotate(c, rot_n, false)
       else
         plaintext << c
       end
@@ -24,10 +20,17 @@ class Caesar
   end
 
   def self.brute_force_attack(ciphertext)
-    (0...ALPHABETS.length).map { |shift| dencrypt(ciphertext, shift) }
+    (0...ALPHABETS_LENGTH).map { |rot_n| dencrypt(ciphertext, rot_n) }
   end
 
   private
+  ALPHABETS_LENGTH = 26
+  def self.rotate(c, rot_n, is_upcase = true)
+    base = (is_upcase ? 'A' : 'a').ord
+    i = (c.ord - base + rot_n) % ALPHABETS_LENGTH + base
+    i.chr
+  end
+
   # のちに例外機構などにして、メソッド内orクラス内に埋め込む
   def self.alert_ciphertext_nil(ciphertext)
     if ciphertext.nil?
@@ -35,6 +38,7 @@ class Caesar
       exit
     end
   end
+
 end
 
 # ciphertext = ARGV[0];
